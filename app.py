@@ -19,6 +19,7 @@ with st.expander("사용 방식", expanded=True):
         """
 - 구글폼 결과를 엑셀(.xlsx)로 저장한 뒤 업로드하세요.
 - 1/2/3순위 컬럼을 선택하고, (선택) 이름/학번 같은 **식별자 컬럼**을 고르세요.
+- **성별 컬럼**을 지정하면 남/여 인원을 각각 6등분하여 독립적으로 TO를 계산하고, 성별 집단 내에서만 배정합니다.
 - 랜덤 배정의 재현성을 원하면 **시드(seed)** 값을 숫자로 입력하세요. (예: 20260303)
 - 결과는 `배정결과` / `요약` / (선택) `추첨로그` 시트로 내려받을 수 있습니다.
         """
@@ -50,6 +51,11 @@ with col3:
     third_col = st.selectbox("3순위 컬럼", cols, index=min(2, len(cols)-1))
 
 id_col = st.selectbox("식별자(이름/학번) 컬럼 (선택)", ["(없음)"] + cols, index=0)
+gender_col = st.selectbox(
+    "성별 컬럼 (선택) — 지정 시 남/여를 분리하여 각각 TO 계산 후 배정",
+    ["(없음)"] + cols,
+    index=0,
+)
 
 seed_str = st.text_input("랜덤 시드(seed) (선택, 숫자)", value="20260303")
 include_log = st.checkbox("추첨 로그 포함(권장)", value=True)
@@ -73,6 +79,7 @@ result = allocate_departments(
     second_col=second_col,
     third_col=third_col,
     id_col=None if id_col == "(없음)" else id_col,
+    gender_col=None if gender_col == "(없음)" else gender_col,
     seed=seed,
     include_log=include_log,
 )

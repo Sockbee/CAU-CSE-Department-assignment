@@ -2,7 +2,7 @@
 CLI (커맨드라인) 버전
 예시:
   python allocate_cli.py --input input.xlsx --output output.xlsx --sheet Sheet1 \
-    --first "1순위" --second "2순위" --third "3순위" --id "이름" --seed 20260303
+    --first "1순위" --second "2순위" --third "3순위" --id "이름" --gender "성별" --seed 20260303
 
 Streamlit UI가 더 편하면 app.py를 추천합니다.
 """
@@ -21,6 +21,7 @@ def main():
     p.add_argument("--second", required=True, help="2순위 컬럼명")
     p.add_argument("--third", required=True, help="3순위 컬럼명")
     p.add_argument("--id", default=None, help="식별자 컬럼명(이름/학번 등)")
+    p.add_argument("--gender", default=None, help="성별 컬럼명 — 지정 시 남/여 분리 TO 계산 및 배정")
     p.add_argument("--seed", type=int, default=None, help="랜덤 시드(재현성)")
     p.add_argument("--no-log", action="store_true", help="추첨로그 생성 안 함")
     args = p.parse_args()
@@ -35,6 +36,7 @@ def main():
         second_col=args.second,
         third_col=args.third,
         id_col=args.id,
+        gender_col=args.gender,
         seed=args.seed,
         include_log=not args.no_log,
     )
